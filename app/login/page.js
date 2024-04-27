@@ -1,44 +1,38 @@
 // app/register/page.js
 "use client";
+import { set } from "mongoose";
 import { useState } from "react";
 import { FormEvent } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
-
-export default function Register() {
-    const [name, setName] = useState("somkiat");
+export default function Login() {
     const [email, setEmail] = useState("somkiat@gmail.com");
     const [password, setPassword] = useState("42117622");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async(e) => {
         try {
             e.preventDefault();
             setLoading(true);
-            //ส่งให้ฐานข้อมูล
-            //console.table({ name, email, password });
-            const response = await fetch(`${process.env.API}/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password,
-                }),
+            //ส่งให้ฐานข้อมูล //console.table({ name, email, password });
+            const result = await signIn("credentials", {
+                redirect: false,
+                email,
+                password,
             });
 
-            const data = await response.json();
-            if (!response.ok) {
-                toast.error(data.err);
-                setLoading(false);
-            } else {
-                toast.success(data.success);
-                router.push("/login");
+              setLoading(false);
+              
+              if (result?.error) {
+                toast.error(result?.error);
+              } else {
+                toast.success("Login success");
+                router.push("/");
             }
+
         } catch (err) {
             console.log(err);
             setLoading(false);
@@ -50,15 +44,8 @@ export default function Register() {
             <div className="container">
                 <div className="row d-flex justify-content-center align-items-center vh-100">
                     <div className="col-lg-5 bg-light p-3 shadow">
-                        <h2 className="mb-4 text-center">Register</h2>
+                        <h2 className="mb-4 text-center">Login</h2>
                         <form onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                className="form-control mb-4"
-                                placeholder="Your name"
-                            />
                             <input
                                 type="email"
                                 value={email}
@@ -75,7 +62,7 @@ export default function Register() {
                             />
                             <button
                                 className="btn btn-primary btn-raised"
-                                disabled={loading || !name || !email || !password}
+                                disabled={loading || !email || !password}
                             >
                                 {loading ? "Please wait.." : "Submit"}
                             </button>

@@ -7,13 +7,17 @@ const DB_URI =
     : "mongodb://localhost:27017/lptrade";
 */
 
+
 const API =
   process.env.NODE_ENV === "production"
-    ? "https://xxx.vercel.com/api"
+    ? "https://lptrade-eleclabs-projects.vercel.app/api"
     : "http://localhost:3000/api";
 
+// name "NEXTAUTH_SECRET" is important, dont rename it
+const NEXTAUTH_SECRET = "GSFGS5566dhdhDHDH888";  //Your Secret
 
 module.exports = {
-  DB_URI,
+  DB_URI, 
   API,
+  NEXTAUTH_SECRET,
 };
