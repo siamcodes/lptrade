@@ -4,7 +4,7 @@ import { set } from "mongoose";
 import { useState } from "react";
 import { FormEvent } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 export default function Login() {
@@ -12,8 +12,11 @@ export default function Login() {
     const [password, setPassword] = useState("42117622");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get("callbackUrl") || "/";
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
+
         try {
             e.preventDefault();
             setLoading(true);
@@ -24,13 +27,14 @@ export default function Login() {
                 password,
             });
 
-              setLoading(false);
-              
-              if (result?.error) {
+            setLoading(false);
+
+            if (result?.error) {
                 toast.error(result?.error);
-              } else {
+            } else {
                 toast.success("Login success");
-                router.push("/");
+                //router.push("/");
+                router.push(callbackUrl);
             }
 
         } catch (err) {
@@ -65,6 +69,13 @@ export default function Login() {
                                 disabled={loading || !email || !password}
                             >
                                 {loading ? "Please wait.." : "Submit"}
+                            </button>
+                            <br/>
+                            <button
+                                className="btn btn-danger btn-raised mb-4"
+                                onClick={() => signIn("google", { callbackUrl: "/" })}
+                            >
+                                Sign in with Google
                             </button>
                         </form>
                     </div>
