@@ -6,6 +6,12 @@ export default function AdminNav() {
                 <Link className="nav-link" href="/dashboard/admin">
                     Admin
                 </Link>
+                <Link className="nav-link" href="/dashboard/admin/category">
+                    Categories
+                </Link>
+                <Link className="nav-link" href="/dashboard/admin/tag">
+                    Tags
+                </Link>
                 <Link className="nav-link" href="/dashboard/admin/product/create">
                     Create Product
                 </Link>
