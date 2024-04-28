@@ -35,6 +35,33 @@ export const authOptions = {
                 return user;
             },
         }),],
+    callbacks: {
+        async signIn({ user }) {
+            dbConnect();
+            const { email } = user;
+            // Try to find a user with the provided email
+            let dbUser = await User.findOne({ email });
+            // If the user doesn't exist, create a new one
+            if (!dbUser) {
+                dbUser = await User.create({
+                    email,
+                    name: user?.name,
+                    image: user?.image,
+                });
+            }
+            return true;
+        },
+        jwt: async ({ token, user }) => {
+            const userByEmail = await User.findOne({ email: token.email });
+            userByEmail.password = undefined;
+            token.user = userByEmail;
+            return token;
+          },
+          session: async ({ session, token }) => {
+            session.user = token.user;
+            return session;
+          },
+    },
     secret: process.env.NEXT_AUTH_SECRET,
     pages: {
         signIn: "/login",

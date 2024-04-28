@@ -70,14 +70,15 @@ export default function Login() {
                             >
                                 {loading ? "Please wait.." : "Submit"}
                             </button>
-                            <br/>
-                            <button
-                                className="btn btn-danger btn-raised mb-4"
-                                onClick={() => signIn("google", { callbackUrl: "/" })}
-                            >
-                                Sign in with Google
-                            </button>
+                            <br />
+
                         </form>
+                        <button
+                            className="btn btn-danger btn-raised mb-4"
+                            onClick={() => signIn("google", { callbackUrl: "/" })}
+                        >
+                            Sign in with Google
+                        </button>
                     </div>
                 </div>
             </div>
